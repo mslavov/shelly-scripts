@@ -1,0 +1,21 @@
+{
+  "accessory": "mqttthing",
+  "type": "thermostat",
+  "name": "Boiler Thermostat",
+  "url": "mqtt://192.168.1.160:1883",
+  "topics": {
+    "getCurrentHeatingCoolingState": "boiler/heating/states/state/current",
+    "setTargetHeatingCoolingState": "boiler/heating/control/state/target",
+    "getTargetHeatingCoolingState": "boiler/heating/states/state/target",
+    "getCurrentTemperature": "boiler/heating/states/temperature/current",
+    "setTargetTemperature": "boiler/heating/control/temperature/target",
+    "getTargetTemperature": "boiler/heating/states/temperature/target",
+    "setTemperatureDisplayUnits": "boiler/heating/control/temperature/units",
+    "getTemperatureDisplayUnits": "boiler/heating/states/temperature/units"
+  },
+  "heatingCoolingStateValues": ["Off", "On"],
+  "temperatureDisplayUnitsValues": ["C", "F"],
+  "minTemperature": 15,
+  "maxTemperature": 80,
+  "restrictHeatingCoolingState": [0, 1]
+}
