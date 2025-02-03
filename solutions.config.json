@@ -10,5 +10,17 @@
       "device": "${BOILER_HOSTNAME}",
       "enableOnBoot": true
     }
+  },
+  "alarm": {
+    "frontDoor": {
+      "src": "src/alarm/frontDoor.ts",
+      "device": "${FRONT_DOOR_SWITCH_HOSTNAME}",
+      "enableOnBoot": true
+    },
+    "windows": {
+      "src": "src/alarm/windows.ts",
+      "device": "${WINDOWS_GATEWAY_HOSTNAME}",
+      "enableOnBoot": true
+    }
   }
 }
