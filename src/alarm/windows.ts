@@ -1,14 +1,14 @@
 import { BTHOME_SVC_ID_STR, BTHomeDecoder } from "./BTHomeDecoder";
 import { RemoteShelly } from "./RemoteShelly";
 
-const SENSOR_ADDRESSES = {
-  [process.env.SHELLY_PUBLIC_KITCHEN_WINDOW_ADDRESS]: false, // Kitchen window
-  [process.env.SHELLY_PUBLIC_OFFICE_WINDOW_ADDRESS]: false, // Office window
-  [process.env.SHELLY_PUBLIC_DINING_ROOM_RIGHT_DOOR_ADDRESS]: false, // Dining room right door
-  [process.env.SHELLY_PUBLIC_DINING_ROOM_LEFT_DOOR_ADDRESS]: false, // Dining room left door
-  [process.env.SHELLY_PUBLIC_CHILDREN_ROOM_WINDOW_ADDRESS]: false, // Children room window
-  [process.env.SHELLY_PUBLIC_GUEST_ROOM_WINDOW_ADDRESS]: false, // Guest room window
-};
+const SENSOR_ADDRESSES = {};
+const addresses = (process.env.SHELLY_PUBLIC_SENSORS_ADDRESSES || "").split(",");
+for (let i in addresses) {
+  let addr = addresses[i].trim();
+  if (addr) {
+    SENSOR_ADDRESSES[addr] = false;
+  }
+}
 
 const windowsSwitchRemote = RemoteShelly.getInstance(process.env.SHELLY_PUBLIC_WINDOWS_SWITCH_ADDRESS);
 
@@ -80,6 +80,6 @@ if (Object.keys(SENSOR_ADDRESSES).length > 1) {
   BLE.Scanner.Start({ duration_ms: SCAN_DURATION, active: ACTIVE_SCAN }, scanCB);
 } else {
   console.log(
-    "No sensor addresses found. Make sure to set the SHELLY_PUBLIC_KITCHEN_WINDOW_ADDRESS, SHELLY_PUBLIC_OFFICE_WINDOW_ADDRESS, SHELLY_PUBLIC_DINING_ROOM_RIGHT_DOOR_ADDRESS, SHELLY_PUBLIC_DINING_ROOM_LEFT_DOOR_ADDRESS, SHELLY_PUBLIC_CHILDREN_ROOM_WINDOW_ADDRESS, SHELLY_PUBLIC_GUEST_ROOM_WINDOW_ADDRESS environment variables."
+    "No sensor addresses found. Make sure to set the SHELLY_PUBLIC_SENSORS_ADDRESSES environment variable with a comma-separated list of sensor addresses."
   );
 }
