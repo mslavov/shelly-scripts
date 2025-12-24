@@ -1,0 +1,104 @@
+---
+description: Workflow for developing solutions based on Shelly devices
+globs: src/**/*.ts, scripts/**/*.ts, docs/**/*.md
+alwaysApply: true
+---
+# Shelly Device Solution Development Workflow
+
+This rule defines the standard workflow for designing and implementing solutions for Shelly devices.
+
+## Solution Design Phase
+
+- Always start by creating a solution design document in the docs/ folder
+- Name the file `docs/<solution-name>.md`
+- The solution design must be complete before proceeding to implementation
+- Design document should include:
+  - Solution overview and purpose
+  - Required hardware (Shelly devices and peripherals)
+  - Logical components and their interactions
+  - Required scripts and their functionality
+  - Configuration parameters
+  - MQTT topics (if applicable)
+
+✅ Correct:
+```markdown
+# Smart Heating Solution
+
+## Overview
+This solution provides zoned heating control using Shelly Plus 1PM devices to control radiator valves.
+
+## Hardware Requirements
+- Shelly Plus 1PM (one per zone)
+- NTC Temperature Sensors (one per zone)
+- Motorized radiator valves (one per zone)
+
+## Components
+1. Temperature monitoring script
+2. Zone controller script
+3. Central scheduler
+...
+```
+
+## Implementation Phase
+
+- Always refer to the solution design document when creating or updating a solution
+- Follow the TypeScript requirements in the development standards
+- Ensure component responsibilities match those defined in the design
+
+## MCP Server Operations
+
+For all solution operations, use the `shelly-forge` MCP server tool with the following commands:
+
+1. Device Discovery:
+```bash
+shelly-forge discover
+```
+
+2. Create scripts/solutions:
+```bash
+shelly-forge create <solution-name> <script-type>
+```
+
+3. Build solutions:
+```bash
+shelly-forge build
+```
+
+4. Deploy to devices:
+```bash
+shelly-forge deploy
+```
+
+5. Enable/disable debug mode:
+```bash
+shelly-forge debug <enable|disable> <device-id>
+```
+
+6. View device logs:
+```bash
+shelly-forge logs <device-id>
+```
+
+## Workflow Order
+
+1. Complete solution design document first
+2. Use `discover` to identify available devices
+3. Use `create` to generate script templates
+4. Implement solution logic following development standards
+5. Use `build` to verify solution
+6. Use `deploy` to install on device
+7. Use `debug` and `logs` for troubleshooting
+
+✅ Correct Workflow:
+1. Create design document: `docs/smart-heating.md`
+2. Discover devices: `shelly-forge discover`
+3. Create script templates: `shelly-forge create smart-heating thermostat`
+4. Implement solution logic in TypeScript
+5. Build solution: `shelly-forge build`
+6. Deploy to devices: `shelly-forge deploy`
+7. Monitor logs: `shelly-forge logs <device-id>`
+
+❌ Incorrect Workflow:
+1. Start coding without a design document
+2. Deploy untested code directly to devices
+3. Debug issues on production devices without local testing 

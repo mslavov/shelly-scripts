@@ -28,13 +28,18 @@ export function getByteSize(type: number): number {
 
 export const BTH = {
   0x00: { n: "pid", t: uint8 },
-  0x01: { n: "Battery", t: uint8, u: "%" },
-  0x05: { n: "Illuminance", t: uint24, f: 0.01 },
-  0x1a: { n: "Door", t: uint8 },
-  0x20: { n: "Moisture", t: uint8 },
-  0x2d: { n: "Window", t: uint8 },
-  0x3a: { n: "Button", t: uint8 },
-  0x3f: { n: "Rotation", t: int16, f: 0.1 },
+  0x01: { n: "battery", t: uint8, u: "%" },
+  0x02: { n: "temperature", t: int16, f: 0.01, u: "tC" },
+  0x03: { n: "humidity", t: uint16, f: 0.01, u: "%" },
+  0x05: { n: "illuminance", t: uint24, f: 0.01 },
+  0x1a: { n: "door", t: uint8 },
+  0x20: { n: "moisture", t: uint8 },
+  0x21: { n: "motion", t: uint8 },
+  0x2d: { n: "window", t: uint8 },
+  0x2e: { n: "humidity", t: uint8, u: "%" },
+  0x3a: { n: "button", t: uint8 },
+  0x3f: { n: "rotation", t: int16, f: 0.1 },
+  0x45: { n: "temperature", t: int16, f: 0.1, u: "tC" },
 };
 
 interface DecodedData {
@@ -110,7 +115,17 @@ export const BTHomeDecoder = {
       _value = this.getBufValue(_bth.t, buffer);
       if (_value === null) break;
       if (typeof _bth.f !== "undefined") _value = _value * _bth.f;
-      result[_bth.n] = _value;
+
+      if (typeof result[_bth.n] === "undefined") {
+        result[_bth.n] = _value;
+      } else {
+        if (Array.isArray(result[_bth.n])) {
+          result[_bth.n].push(_value);
+        } else {
+          result[_bth.n] = [result[_bth.n], _value];
+        }
+      }
+
       buffer = buffer.slice(getByteSize(_bth.t));
     }
     return result;

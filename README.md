@@ -1,6 +1,8 @@
 # Smart Home Solutions with Shelly
 
-A collection of smart home automation solutions built with Shelly devices. This repository contains various scripts and configurations I use to automate my home.
+A collection of smart home automation solutions built with Shelly devices. This
+repository contains various scripts and configurations I use to automate my
+home.
 
 ## Current Solutions
 
@@ -8,14 +10,18 @@ A collection of smart home automation solutions built with Shelly devices. This 
 
 An intelligent heating control system that includes:
 
-- **Thermostat Script**: Controls the boiler based on temperature readings and configurable parameters
-- **MQTT Integration**: Exposes the thermostat through MQTT, compatible with HomeBridge's MQTTThing plugin for HomeKit control
+- **Thermostat Script**: Controls the boiler based on temperature readings and
+  configurable parameters
+- **MQTT Integration**: Exposes the thermostat through MQTT, compatible with
+  HomeBridge's MQTTThing plugin for HomeKit control
 
 ### Alarm System Extension
 
-A sophisticated extension for Paradox security systems using Shelly devices and BLE sensors:
+A sophisticated extension for Paradox security systems using Shelly devices and
+BLE sensors:
 
-- **Front Door Monitor**: Single-sensor solution running directly on a Shelly device
+- **Front Door Monitor**: Single-sensor solution running directly on a Shelly
+  device
 - **Window Monitor**: Multi-sensor solution running on a Shelly BLU Gateway
 - **BTHome Integration**: Decodes BLE advertisements from various sensors
 - **Remote Control**: Manages Shelly devices through RPC calls
@@ -52,8 +58,9 @@ npm run dev
 │   ├── alarm/       # Alarm system extension
 │   │   ├── frontDoor.ts     # Single sensor monitor
 │   │   ├── windows.ts       # Multi-sensor monitor
-│   │   ├── BTHomeDecoder.ts # BLE packet decoder
 │   │   └── RemoteShelly.ts  # RPC utility
+│   └── shared/      # Shared utilities
+│       └── BTHomeDecoder.ts # BLE packet decoder
 ├── dist/            # Compiled output
 ├── solutions.config.json # Configuration for solutions
 └── node_modules/    # Dependencies
@@ -95,7 +102,8 @@ Enables HomeKit integration through HomeBridge:
 
 ### Alarm System Extension
 
-The alarm system extension integrates Shelly devices with a Paradox security system:
+The alarm system extension integrates Shelly devices with a Paradox security
+system:
 
 #### 1. Front Door Monitor (Single Sensor)
 

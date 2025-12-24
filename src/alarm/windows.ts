@@ -1,4 +1,4 @@
-import { BTHOME_SVC_ID_STR, BTHomeDecoder } from "./BTHomeDecoder";
+import { BTHOME_SVC_ID_STR, BTHomeDecoder } from "../shared/BTHomeDecoder";
 import { RemoteShelly } from "./RemoteShelly";
 
 const SENSOR_ADDRESSES = {};
@@ -67,7 +67,7 @@ function scanCB(ev: number, res: BLE.Scanner.ScanResult) {
   lastPacketId = result.pid;
 
   // check if the window is closed
-  if (result.Window === 0) {
+  if (result.window === 0) {
     console.log("Window is closed");
     handleWindowClosedEvent(res.addr);
   } else {

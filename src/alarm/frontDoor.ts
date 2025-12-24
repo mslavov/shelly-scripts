@@ -1,4 +1,4 @@
-import { BTHomeDecoder, BTHOME_SVC_ID_STR } from "./BTHomeDecoder";
+import { BTHomeDecoder, BTHOME_SVC_ID_STR } from "../shared/BTHomeDecoder";
 
 const SCAN_DURATION = BLE.Scanner.INFINITE_SCAN;
 const ACTIVE_SCAN = false;
@@ -17,7 +17,7 @@ function scanCB(ev: number, res: BLE.Scanner.ScanResult) {
   lastPacketId = result.pid;
 
   // check if the window is closed
-  let isClosed = result.Window === 0;
+  let isClosed = result.window === 0;
   console.log("Sensor is " + (isClosed ? "closed" : "open"));
   Shelly.call("Switch.Set", { id: 0, on: isClosed });
 }
