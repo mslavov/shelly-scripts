@@ -13,7 +13,16 @@
     "wscat": "wscat --connect",
     "debug:cleanup": "shelly-forge debug off $SCRIPT_NAME",
     "dev:concurrent": "concurrently --kill-others-on-fail --handle-input \"npm run watch:ts\" \"npm run watch:upload\" \"npm run watch:logs\"",
-    "dev": "npm run debug:setup && npm run build && npm run dev:concurrent; npm run debug:cleanup"
+    "dev": "npm run debug:setup && npm run build && npm run dev:concurrent; npm run debug:cleanup",
+    "schedule": "npx ts-node scripts/schedule-manager.ts",
+    "schedule:list": "npx ts-node scripts/schedule-manager.ts list",
+    "schedule:add": "npx ts-node scripts/schedule-manager.ts add",
+    "schedule:edit": "npx ts-node scripts/schedule-manager.ts edit",
+    "schedule:remove": "npx ts-node scripts/schedule-manager.ts remove",
+    "schedule:export": "npx ts-node scripts/schedule-manager.ts export",
+    "schedule:import": "npx ts-node scripts/schedule-manager.ts import",
+    "schedule:import-defaults": "npx ts-node scripts/schedule-manager.ts import-defaults",
+    "schedule:reset": "npx ts-node scripts/schedule-manager.ts reset"
   },
   "devDependencies": {
     "shelly-forge": "^0.1.4",
@@ -22,6 +31,7 @@
     "@types/node": "^20.0.0",
     "concurrently": "^9.1.2",
     "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
     "wscat": "^6.0.1"
   }
 }

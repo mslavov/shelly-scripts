@@ -1,25 +1,29 @@
 import { CONFIG } from "./config";
-import { store } from "./store";
+import { store, ScheduleConfig } from "./store";
 
-let SCHEDULES = [
+// Default schedules used when KVS is empty
+const DEFAULT_SCHEDULES: ScheduleConfig[] = [
   {
-    // Morning
+    id: 1,
+    name: "Morning",
     weekDays: [false, true, true, true, true, true, false], // 0 = sunday, 6 = saturday
     startTime: 6,
     endTime: 9,
     temperature: 39,
   },
   {
-    // Evening
+    id: 2,
+    name: "Evening",
     weekDays: [false, true, true, true, true, true, false], // 0 = sunday, 6 = saturday
-    startTime: 17,
+    startTime: 14,
     endTime: 20,
     temperature: 39,
   },
   {
-    // Weekend 2
+    id: 3,
+    name: "Weekend",
     weekDays: [true, false, false, false, false, false, true], // 0 = sunday, 6 = saturday
-    startTime: 9,
+    startTime: 7,
     endTime: 20,
     temperature: 39,
   },
@@ -61,13 +65,13 @@ function checkTemperature(res: TemperatureStatus, error_code: number, error_msg:
 }
 
 /*
- * Find the current schedule
+ * Find the current schedule from the provided schedules array
  */
-function findCurrentSchedule() {
+function findCurrentSchedule(schedules: ScheduleConfig[]): ScheduleConfig | null {
   const now = new Date();
-  let currentSchedule = null;
-  for (let i = 0; i < SCHEDULES.length; i++) {
-    let schedule = SCHEDULES[i];
+  let currentSchedule: ScheduleConfig | null = null;
+  for (let i = 0; i < schedules.length; i++) {
+    let schedule = schedules[i];
     if (schedule.weekDays[now.getDay()] && now.getHours() >= schedule.startTime && now.getHours() <= schedule.endTime) {
       currentSchedule = schedule;
       break;
@@ -79,10 +83,10 @@ function findCurrentSchedule() {
 /*
  * Check if the schedule is active and if it is, set the target temperature
  */
-function checkSchedule(isBoilerOn: boolean) {
+function checkSchedule(isBoilerOn: boolean, schedules: ScheduleConfig[]) {
   store.getSchedule((previousSchedule) => {
     print("Previous schedule: " + previousSchedule);
-    const currentSchedule = findCurrentSchedule();
+    const currentSchedule = findCurrentSchedule(schedules);
     print("Current schedule: " + currentSchedule);
     if (!previousSchedule && currentSchedule) {
       store.setState("On", (res) => {
@@ -126,9 +130,21 @@ function checkSchedule(isBoilerOn: boolean) {
  * Check if the boiler is on and if it is, get the temperature
  */
 function checkBoiler() {
-  store.getState((res) => {
-    print("Boiler state: " + res);
-    checkSchedule(res === "On");
+  // Load schedules from KVS, use defaults if not set
+  store.getSchedules((schedules) => {
+    let activeSchedules = schedules;
+    if (!activeSchedules || activeSchedules.length === 0) {
+      print("No schedules in KVS, using defaults");
+      activeSchedules = DEFAULT_SCHEDULES;
+      // Persist defaults to KVS for future runs
+      store.setSchedules(DEFAULT_SCHEDULES, (res) => {
+        print("Default schedules saved to KVS");
+      });
+    }
+    store.getState((res) => {
+      print("Boiler state: " + res);
+      checkSchedule(res === "On", activeSchedules);
+    });
   });
 }
 
